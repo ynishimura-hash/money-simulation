@@ -47,3 +47,7 @@ git push -u origin main
 3. `vercel` と入力してEnterを押していくだけでデプロイされます。
 
 ご不明な点があれば聞いてください！
+
+
+## 登録情報
+- Vercel Username: ynishimura24

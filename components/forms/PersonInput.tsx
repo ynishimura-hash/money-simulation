@@ -16,7 +16,7 @@ export default function PersonInput({ title, person, onChange, colorClass }: Pro
 
     return (
         <div className={`p-4 rounded-2xl border ${colorClass} space-y-4`}>
-            <h3 className="font-bold text-lg flex items-center gap-2">
+            <h3 className="font-bold text-lg flex items-center gap-2 text-slate-700">
                 <User size={20} /> {title}
             </h3>
 
