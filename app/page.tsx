@@ -36,13 +36,23 @@ export default function Home() {
       loanInterestRate: 0
     },
     expenses: {
-      monthlyBasicLiving: 150000,
+      food: 60000,
+      utilities: 20000,
+      communication: 10000,
+      dailyGoods: 10000,
+      entertainment: 30000,
+      otherBasic: 20000,
       yearlySpecialExpenses: 300000,
       vehicleReplacements: []
     },
     assets: {
       cashSavings: 3000000,
       investmentAssets: 1000000,
+      monthlyInvestment: {
+        amount: 30000,
+        expectedReturn: 5.0,
+        durationYears: 20
+      },
       otherLoansRemaining: 0,
       otherMonthlyPayment: 0
     },

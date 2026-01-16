@@ -101,13 +101,69 @@ export default function ExpensesForm({ housing, expenses, onHousingChange, onExp
                 </h3>
                 <div className="bg-emerald-50 p-4 rounded-xl border border-emerald-100 space-y-3">
                     <div>
-                        <label className="text-xs font-bold text-slate-700">毎月の基本生活費 (食費・光熱費・通信費など)</label>
-                        <p className="text-[10px] text-slate-400 mb-1">※ 住居費・教育費は除いてください</p>
-                        <MoneyInput
-                            className="w-full p-2 rounded border border-emerald-200 text-sm text-slate-900 font-medium"
-                            value={expenses.monthlyBasicLiving}
-                            onChange={(val) => handleExpense('monthlyBasicLiving', val)}
-                        />
+                        <label className="text-xs font-bold text-slate-700">毎月の基本生活費 (内訳)</label>
+                        <p className="text-[10px] text-slate-400 mb-2">※ 住居費・教育費は除いてください</p>
+
+                        <div className="grid grid-cols-2 gap-3 mb-2">
+                            <div>
+                                <label className="text-[10px] text-slate-500 block mb-1">食費</label>
+                                <MoneyInput
+                                    className="w-full p-2 rounded border border-emerald-200 text-sm text-slate-900 font-medium bg-white"
+                                    value={expenses.food}
+                                    onChange={(val) => handleExpense('food', val)}
+                                />
+                            </div>
+                            <div>
+                                <label className="text-[10px] text-slate-500 block mb-1">水道光熱費</label>
+                                <MoneyInput
+                                    className="w-full p-2 rounded border border-emerald-200 text-sm text-slate-900 font-medium bg-white"
+                                    value={expenses.utilities}
+                                    onChange={(val) => handleExpense('utilities', val)}
+                                />
+                            </div>
+                            <div>
+                                <label className="text-[10px] text-slate-500 block mb-1">通信費</label>
+                                <MoneyInput
+                                    className="w-full p-2 rounded border border-emerald-200 text-sm text-slate-900 font-medium bg-white"
+                                    value={expenses.communication}
+                                    onChange={(val) => handleExpense('communication', val)}
+                                />
+                            </div>
+                            <div>
+                                <label className="text-[10px] text-slate-500 block mb-1">日用品</label>
+                                <MoneyInput
+                                    className="w-full p-2 rounded border border-emerald-200 text-sm text-slate-900 font-medium bg-white"
+                                    value={expenses.dailyGoods}
+                                    onChange={(val) => handleExpense('dailyGoods', val)}
+                                />
+                            </div>
+                            <div>
+                                <label className="text-[10px] text-slate-500 block mb-1">趣味・娯楽・交際</label>
+                                <MoneyInput
+                                    className="w-full p-2 rounded border border-emerald-200 text-sm text-slate-900 font-medium bg-white"
+                                    value={expenses.entertainment}
+                                    onChange={(val) => handleExpense('entertainment', val)}
+                                />
+                            </div>
+                            <div>
+                                <label className="text-[10px] text-slate-500 block mb-1">その他</label>
+                                <MoneyInput
+                                    className="w-full p-2 rounded border border-emerald-200 text-sm text-slate-900 font-medium bg-white"
+                                    value={expenses.otherBasic}
+                                    onChange={(val) => handleExpense('otherBasic', val)}
+                                />
+                            </div>
+                        </div>
+                        <div className="text-right text-xs font-bold text-emerald-700 bg-emerald-100/50 p-2 rounded-lg">
+                            合計: {(
+                                (expenses.food || 0) +
+                                (expenses.utilities || 0) +
+                                (expenses.communication || 0) +
+                                (expenses.dailyGoods || 0) +
+                                (expenses.entertainment || 0) +
+                                (expenses.otherBasic || 0)
+                            ).toLocaleString()}円 / 月
+                        </div>
                     </div>
                     <div>
                         <label className="text-xs font-bold text-slate-700">年間の特別支出 (旅行・帰省・家具家電など)</label>

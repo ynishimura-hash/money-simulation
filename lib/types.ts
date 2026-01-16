@@ -33,7 +33,14 @@ export interface Housing {
 }
 
 export interface Expenses {
-    monthlyBasicLiving: number; // Food, Utilities, etc. (excluding housing/education)
+    // Breakdown of monthly costs
+    food: number;
+    utilities: number;
+    communication: number;
+    dailyGoods: number;
+    entertainment: number;
+    otherBasic: number;
+
     yearlySpecialExpenses: number; // Travel, etc.
     vehicleReplacements: {
         intervalYears: number;
@@ -41,9 +48,18 @@ export interface Expenses {
     }[];
 }
 
+export interface MonthlyInvestment {
+    amount: number; // Monthly calculation
+    expectedReturn: number; // %
+    durationYears: number; // How long to continue
+}
+
 export interface Assets {
     cashSavings: number;
     investmentAssets: number;
+    // New: Monthly Tsumitate
+    monthlyInvestment?: MonthlyInvestment;
+
     // Liabilities
     otherLoansRemaining: number;
     otherMonthlyPayment: number;

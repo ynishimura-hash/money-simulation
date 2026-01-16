@@ -7,7 +7,8 @@ export function calculateLifePlan(input: LifePlanInput): YearlyCashFlow[] {
 
     // Initialize state
     let currentCash = assets.cashSavings;
-    let currentInvestments = assets.investmentAssets;
+    let mainInvestments = assets.investmentAssets;
+    let tsumitateInvestments = 0;
 
     // We simulate until the head of household is 100 years old
     const startAge = headOfHousehold.currentAge;
@@ -49,19 +50,27 @@ export function calculateLifePlan(input: LifePlanInput): YearlyCashFlow[] {
 
         // 1. Basic Living (inflate)
         const inflationMultiplier = Math.pow(1 + config.inflationRate / 100, year);
-        const basicLiving = expenses.monthlyBasicLiving * 12 * inflationMultiplier;
+
+        const monthlyLivingSum =
+            (expenses.food || 0) +
+            (expenses.utilities || 0) +
+            (expenses.communication || 0) +
+            (expenses.dailyGoods || 0) +
+            (expenses.entertainment || 0) +
+            (expenses.otherBasic || 0);
+
+        // Fallback or Sum
+        const basicLiving = (monthlyLivingSum > 0 ? monthlyLivingSum : expenses.monthlyBasicLiving || 0) * 12 * inflationMultiplier;
         const specialExp = expenses.yearlySpecialExpenses * inflationMultiplier;
 
         // 2. Housing
         let housingCostAnnual = 0;
         if (housing.type === 'rent') {
-            housingCostAnnual = housing.monthlyCost * 12 * inflationMultiplier; // Rent increases with inflation usually
+            housingCostAnnual = housing.monthlyCost * 12 * inflationMultiplier;
         } else if (housing.type === 'own_with_loan') {
-            // Main loan payment (fixed usually)
             if (year < housing.remainingLoanYears) {
                 housingCostAnnual += housing.monthlyCost * 12;
             }
-            // Maintenance (inflates)
             housingCostAnnual += housing.maintenanceCostPerYear * inflationMultiplier;
         } else {
             housingCostAnnual += housing.maintenanceCostPerYear * inflationMultiplier;
@@ -77,18 +86,8 @@ export function calculateLifePlan(input: LifePlanInput): YearlyCashFlow[] {
         // 4. Events (Cars, Loans)
         let eventCost = 0;
         if (assets.otherLoansRemaining > 0) {
-            // Simplified: pay until done. Realistically need term. 
-            // Assuming loan reduces linearly.
             const yearlyLoanPay = assets.otherMonthlyPayment * 12;
-            if (currentCash > yearlyLoanPay) { // Simplified check
-                // This logic is a bit weak without a proper loan schedule state, but ok for now.
-                // Let's assume the user inputs "Remaining Years" for other loans in a real app,
-                // but for now let's just subtract until 'otherLoansRemaining' concept in state is depleted (not tracking state deeply here for simplicity, just flow).
-                // Actually, let's just use monthly cost provided.
-                // Refinement: The Type doesn't have "remaining years" for other loans.
-                // Use a fixed approximation or infinite? Let's assume 5 years if not specified or just pay forever?
-                // Let's assume the user inputs valid monthly payment that ends correctly.
-                // We'll skip complex other loan logic for MVP v2 and just use monthly payment * 12.
+            if (currentCash > yearlyLoanPay) {
                 eventCost += assets.otherMonthlyPayment * 12;
             }
         }
@@ -102,45 +101,52 @@ export function calculateLifePlan(input: LifePlanInput): YearlyCashFlow[] {
 
         const totalExpenses = basicLiving + specialExp + housingCostAnnual + educationCost + eventCost;
 
+        // Tsumitate Flow
+        let tsumitateFlow = 0;
+        if (assets.monthlyInvestment && year < assets.monthlyInvestment.durationYears) {
+            tsumitateFlow = assets.monthlyInvestment.amount * 12;
+        }
+
         // --- BALANCE & ASSET GROWTH ---
-        const surplus = totalIncome - totalExpenses;
+        const surplus = totalIncome - totalExpenses - tsumitateFlow;
 
-        // Asset Growth (Start of year assets generate return? Or End? usually average. Let's do Start)
-        // Investment growth
-        const investmentReturn = currentInvestments * (config.investmentReturnRate / 100);
+        // 1. Tsumitate Growth
+        if (assets.monthlyInvestment) {
+            const tsumitateReturn = tsumitateInvestments * (assets.monthlyInvestment.expectedReturn / 100);
+            tsumitateInvestments += tsumitateReturn + tsumitateFlow;
+        }
 
-        // Bank interest (negligible, ignore or tiny)
-        // Update Principle
-        // Strategy: If surplus > 0, put into Investment (or Bank? User preference).
-        // Let's assume specific "Savings" behavior. 
-        // For simplicity: Surplus goes to Investment? Or Split?
-        // Usually people save cash for emergency. Let's keep cash constant-ish or grow slowly, and put surplus to investment.
-        // Actually, let's just add surplus to "Assets".
+        // 2. Main Investment Growth
+        const mainReturn = mainInvestments * (config.investmentReturnRate / 100);
+        mainInvestments += mainReturn;
 
-        let newInvestments = currentInvestments + investmentReturn;
-
+        // 3. Surplus Allocation
         if (surplus >= 0) {
-            // Add to investments
-            newInvestments += surplus;
+            mainInvestments += surplus;
         } else {
-            // Deficit: Withdraw from Cash first, then Investments
+            // Deficit
             let deficit = -surplus;
             if (currentCash >= deficit) {
                 currentCash -= deficit;
             } else {
                 deficit -= currentCash;
                 currentCash = 0;
-                newInvestments -= deficit;
+
+                if (mainInvestments >= deficit) {
+                    mainInvestments -= deficit;
+                } else {
+                    deficit -= mainInvestments;
+                    mainInvestments = 0;
+                    if (tsumitateInvestments > 0) {
+                        // Emergency fund from Tsumitate
+                        tsumitateInvestments -= deficit;
+                    }
+                }
             }
         }
 
-        // Update state
-        currentInvestments = newInvestments;
-        // (CurrentCash stays same if surplus > 0? Maybe realistic to move some surplus to cash? 
-        // Let's assume 100% investment of surplus for maximizing "Simulation" effect, or 50/50?
-        // Let's keep it simple: Surplus -> Investment. 
-
-        const totalAssets = currentCash + currentInvestments;
+        const totalInvestments = mainInvestments + tsumitateInvestments;
+        const totalAssets = currentCash + totalInvestments;
 
         results.push({
             age: currentYearAge,
@@ -155,7 +161,7 @@ export function calculateLifePlan(input: LifePlanInput): YearlyCashFlow[] {
             totalExpenses,
             annualSurplus: surplus,
             totalAssets: Math.round(totalAssets),
-            investmentAssets: Math.round(currentInvestments),
+            investmentAssets: Math.round(totalInvestments),
             cashAssets: Math.round(currentCash),
             realTotalAssets: Math.round(totalAssets / inflationMultiplier)
         });
