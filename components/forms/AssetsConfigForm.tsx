@@ -2,6 +2,7 @@ import React from 'react';
 import { Assets, SimulationConfig } from '@/lib/types';
 import { Landmark, Settings, TrendingUp } from 'lucide-react';
 import MoneyInput from '../MoneyInput';
+import PercentageInput from '../PercentageInput';
 
 interface Props {
     assets: Assets;
@@ -73,29 +74,17 @@ export default function AssetsConfigForm({ assets, config, onAssetsChange, onCon
                         <label className="text-xs font-bold text-slate-700 flex items-center gap-1 mb-1">
                             <TrendingUp size={12} /> 想定運用利回り(年率)
                         </label>
-                        <div className="flex items-center bg-white border border-purple-200 rounded-lg px-3 py-2">
-                            <input
-                                type="number"
-                                step={0.1}
-                                className="w-full text-sm text-slate-900 font-medium outline-none bg-transparent"
-                                value={config.investmentReturnRate}
-                                onChange={(e) => handleConfig('investmentReturnRate', Number(e.target.value))}
-                            />
-                            <span className="text-slate-500 text-sm font-bold ml-1">%</span>
-                        </div>
+                        <PercentageInput
+                            value={config.investmentReturnRate}
+                            onChange={(val) => handleConfig('investmentReturnRate', val)}
+                        />
                     </div>
                     <div>
                         <label className="text-xs font-bold text-slate-700 mb-1 block">インフレ率 (年率)</label>
-                        <div className="flex items-center bg-white border border-purple-200 rounded-lg px-3 py-2">
-                            <input
-                                type="number"
-                                step={0.1}
-                                className="w-full text-sm text-slate-900 font-medium outline-none bg-transparent"
-                                value={config.inflationRate}
-                                onChange={(e) => handleConfig('inflationRate', Number(e.target.value))}
-                            />
-                            <span className="text-slate-500 text-sm font-bold ml-1">%</span>
-                        </div>
+                        <PercentageInput
+                            value={config.inflationRate}
+                            onChange={(val) => handleConfig('inflationRate', val)}
+                        />
                     </div>
                 </div>
             </div>
