@@ -138,11 +138,27 @@ export default function ExpensesForm({ housing, expenses, onHousingChange, onExp
                                 />
                             </div>
                             <div>
+                                <label className="text-[10px] text-slate-500 block mb-1">被服・美容費</label>
+                                <MoneyInput
+                                    className="w-full p-2 rounded border border-emerald-200 text-sm text-slate-900 font-medium bg-white"
+                                    value={expenses.clothingBeauty}
+                                    onChange={(val) => handleExpense('clothingBeauty', val)}
+                                />
+                            </div>
+                            <div>
                                 <label className="text-[10px] text-slate-500 block mb-1">趣味・娯楽・交際</label>
                                 <MoneyInput
                                     className="w-full p-2 rounded border border-emerald-200 text-sm text-slate-900 font-medium bg-white"
                                     value={expenses.entertainment}
                                     onChange={(val) => handleExpense('entertainment', val)}
+                                />
+                            </div>
+                            <div>
+                                <label className="text-[10px] text-slate-500 block mb-1">医療・保険</label>
+                                <MoneyInput
+                                    className="w-full p-2 rounded border border-emerald-200 text-sm text-slate-900 font-medium bg-white"
+                                    value={expenses.medicalInsurance}
+                                    onChange={(val) => handleExpense('medicalInsurance', val)}
                                 />
                             </div>
                             <div>
@@ -160,7 +176,9 @@ export default function ExpensesForm({ housing, expenses, onHousingChange, onExp
                                 (expenses.utilities || 0) +
                                 (expenses.communication || 0) +
                                 (expenses.dailyGoods || 0) +
+                                (expenses.clothingBeauty || 0) +
                                 (expenses.entertainment || 0) +
+                                (expenses.medicalInsurance || 0) +
                                 (expenses.otherBasic || 0)
                             ).toLocaleString()}円 / 月
                         </div>

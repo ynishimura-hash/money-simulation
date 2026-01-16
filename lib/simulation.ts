@@ -56,11 +56,13 @@ export function calculateLifePlan(input: LifePlanInput): YearlyCashFlow[] {
             (expenses.utilities || 0) +
             (expenses.communication || 0) +
             (expenses.dailyGoods || 0) +
+            (expenses.clothingBeauty || 0) +
             (expenses.entertainment || 0) +
+            (expenses.medicalInsurance || 0) +
             (expenses.otherBasic || 0);
 
-        // Fallback or Sum
-        const basicLiving = (monthlyLivingSum > 0 ? monthlyLivingSum : expenses.monthlyBasicLiving || 0) * 12 * inflationMultiplier;
+        // Sum Only
+        const basicLiving = monthlyLivingSum * 12 * inflationMultiplier;
         const specialExp = expenses.yearlySpecialExpenses * inflationMultiplier;
 
         // 2. Housing

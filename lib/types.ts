@@ -38,7 +38,9 @@ export interface Expenses {
     utilities: number;
     communication: number;
     dailyGoods: number;
+    clothingBeauty: number; // New
     entertainment: number;
+    medicalInsurance: number; // New
     otherBasic: number;
 
     yearlySpecialExpenses: number; // Travel, etc.

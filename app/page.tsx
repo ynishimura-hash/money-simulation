@@ -40,7 +40,9 @@ export default function Home() {
       utilities: 20000,
       communication: 10000,
       dailyGoods: 10000,
+      clothingBeauty: 10000,
       entertainment: 30000,
+      medicalInsurance: 5000,
       otherBasic: 20000,
       yearlySpecialExpenses: 300000,
       vehicleReplacements: []
