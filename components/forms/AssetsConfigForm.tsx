@@ -2,6 +2,7 @@ import React from 'react';
 import { Assets, Config } from '@/lib/types';
 import { Landmark, Settings, TrendingUp } from 'lucide-react';
 import MoneyInput from '../MoneyInput';
+import SliderMoneyInput from '../SliderMoneyInput';
 import PercentageInput from '../PercentageInput';
 
 interface Props {
@@ -32,10 +33,11 @@ export default function AssetsConfigForm({ assets, config, onAssetsChange, onCon
                     <div className="grid grid-cols-3 gap-3">
                         <div>
                             <label className="text-[10px] text-slate-500 mb-1 block">積立額 (月額)</label>
-                            <MoneyInput
+                            <SliderMoneyInput
                                 className="w-full p-2 rounded border border-blue-200 text-sm text-slate-900 font-medium bg-white"
                                 value={assets.monthlyInvestment?.amount || 0}
                                 onChange={(val) => onAssetsChange({ ...assets, monthlyInvestment: { ...assets.monthlyInvestment || { expectedReturn: 5, durationYears: 20, amount: 0 }, amount: val } })}
+                                max={300000} // Up to 300k
                             />
                         </div>
                         <div>

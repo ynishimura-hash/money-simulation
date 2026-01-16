@@ -68,6 +68,10 @@ export default function Home() {
 
   const [expandedSection, setExpandedSection] = useState<string | null>('assets');
 
+  // Graph Options
+  const [isLogScale, setIsLogScale] = useState(false);
+  const [maxDisplayAge, setMaxDisplayAge] = useState(100);
+
   // Comparison State
   const [compareInput, setCompareInput] = useState<LifePlanInput | null>(null);
 
@@ -270,13 +274,44 @@ export default function Home() {
 
           {/* Graphs */}
           <div className="bg-white p-2 rounded-2xl shadow-sm border border-slate-200">
-            <div className="p-4 border-b border-slate-100 mb-4">
-              <h3 className="font-bold text-lg text-slate-800">資産推移シミュレーション</h3>
-              <p className="text-xs text-slate-500">
-                {input.assets.monthlyInvestment?.expectedReturn || 0}%運用 / インフレ率{input.config.inflationRate}%
-              </p>
+            <div className="p-4 border-b border-slate-100 mb-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div>
+                <h3 className="font-bold text-lg text-slate-800">資産推移シミュレーション</h3>
+                <p className="text-xs text-slate-500">
+                  {input.assets.monthlyInvestment?.expectedReturn || 0}%運用 / インフレ率{input.config.inflationRate}%
+                </p>
+              </div>
+              <div className="flex items-center gap-4 text-xs">
+                <label className="flex items-center gap-1 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={isLogScale}
+                    onChange={(e) => setIsLogScale(e.target.checked)}
+                    className="rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                  />
+                  <span className="text-slate-600 font-bold">対数表示</span>
+                </label>
+                <div className="flex items-center gap-2">
+                  <span className="text-slate-500">表示期間:</span>
+                  <select
+                    value={maxDisplayAge}
+                    onChange={(e) => setMaxDisplayAge(Number(e.target.value))}
+                    className="bg-slate-100 border-none rounded py-1 px-2 text-slate-700 font-medium"
+                  >
+                    <option value={100}>100歳まで</option>
+                    <option value={90}>90歳まで</option>
+                    <option value={80}>80歳まで</option>
+                    <option value={70}>70歳まで</option>
+                    <option value={60}>60歳まで</option>
+                  </select>
+                </div>
+              </div>
             </div>
-            <AssetTransitionGraph data={results} />
+            <AssetTransitionGraph
+              data={results}
+              isLogScale={isLogScale}
+              maxDisplayAge={maxDisplayAge}
+            />
           </div>
 
 
