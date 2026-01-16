@@ -74,12 +74,15 @@ export default function FamilyForm({ childrenData, onChange }: Props) {
                         </div>
                         <div>
                             <label className="text-xs font-bold text-slate-700">現在の年齢</label>
-                            <input
-                                type="number"
-                                className="w-full text-sm p-1 bg-white rounded border border-pink-200 text-slate-900 font-medium"
-                                value={child.age}
-                                onChange={(e) => updateChild(index, 'age', Number(e.target.value))}
-                            />
+                            <div className="relative">
+                                <input
+                                    type="number"
+                                    className="w-full text-sm p-1 pr-6 bg-white rounded border border-pink-200 text-slate-900 font-medium"
+                                    value={child.age}
+                                    onChange={(e) => updateChild(index, 'age', Number(e.target.value))}
+                                />
+                                <span className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-500 text-xs font-bold pointer-events-none">歳</span>
+                            </div>
                         </div>
                     </div>
 

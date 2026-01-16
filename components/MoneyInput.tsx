@@ -26,13 +26,18 @@ export default function MoneyInput({ value, onChange, className = "", placeholde
     };
 
     return (
-        <input
-            type="text"
-            className={className}
-            value={value === 0 ? '' : formatValue(value)}
-            onChange={handleChange}
-            placeholder={placeholder}
-            inputMode="numeric" // Shows numeric keyboard on mobile
-        />
+        <div className="relative w-full">
+            <input
+                type="text"
+                className={`${className} pr-8`}
+                value={value === 0 ? '' : formatValue(value)}
+                onChange={handleChange}
+                placeholder={placeholder}
+                inputMode="numeric"
+            />
+            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 text-sm font-bold pointer-events-none">
+                円
+            </span>
+        </div>
     );
 }

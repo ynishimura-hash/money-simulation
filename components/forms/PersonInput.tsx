@@ -1,6 +1,6 @@
 import React from 'react';
 import { Person } from '@/lib/types';
-import { User, Briefcase, JapaneseYen } from 'lucide-react';
+import { User, Briefcase } from 'lucide-react';
 import MoneyInput from '../MoneyInput';
 
 interface Props {
@@ -24,21 +24,27 @@ export default function PersonInput({ title, person, onChange, colorClass }: Pro
             <div className="grid grid-cols-2 gap-4">
                 <div>
                     <label className="block text-xs font-bold text-slate-700 mb-1">現在の年齢</label>
-                    <input
-                        type="number"
-                        className="w-full p-2 rounded-lg bg-white border border-slate-200 text-slate-900 font-medium"
-                        value={person.currentAge}
-                        onChange={(e) => handleChange('currentAge', Number(e.target.value))}
-                    />
+                    <div className="relative">
+                        <input
+                            type="number"
+                            className="w-full p-2 pr-8 rounded-lg bg-white border border-slate-200 text-slate-900 font-medium"
+                            value={person.currentAge}
+                            onChange={(e) => handleChange('currentAge', Number(e.target.value))}
+                        />
+                        <span className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 text-sm font-bold pointer-events-none">歳</span>
+                    </div>
                 </div>
                 <div>
                     <label className="block text-xs font-bold text-slate-700 mb-1">引退年齢</label>
-                    <input
-                        type="number"
-                        className="w-full p-2 rounded-lg bg-white border border-slate-200 text-slate-900 font-medium"
-                        value={person.targetRetirementAge}
-                        onChange={(e) => handleChange('targetRetirementAge', Number(e.target.value))}
-                    />
+                    <div className="relative">
+                        <input
+                            type="number"
+                            className="w-full p-2 pr-8 rounded-lg bg-white border border-slate-200 text-slate-900 font-medium"
+                            value={person.targetRetirementAge}
+                            onChange={(e) => handleChange('targetRetirementAge', Number(e.target.value))}
+                        />
+                        <span className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 text-sm font-bold pointer-events-none">歳</span>
+                    </div>
                 </div>
             </div>
 
@@ -58,36 +64,27 @@ export default function PersonInput({ title, person, onChange, colorClass }: Pro
             <div className="space-y-3">
                 <div className="relative">
                     <label className="block text-xs font-bold text-slate-700 mb-1">昨年の年収 (額面)</label>
-                    <div className="relative">
-                        <JapaneseYen size={16} className="absolute left-3 top-3 text-slate-400" />
-                        <MoneyInput
-                            className="w-full pl-9 p-2 rounded-lg bg-white border border-slate-200 text-slate-900 font-medium"
-                            value={person.annualIncome}
-                            onChange={(val) => handleChange('annualIncome', val)}
-                        />
-                    </div>
+                    <MoneyInput
+                        className="w-full p-2 rounded-lg bg-white border border-slate-200 text-slate-900 font-medium"
+                        value={person.annualIncome}
+                        onChange={(val) => handleChange('annualIncome', val)}
+                    />
                 </div>
                 <div className="relative">
                     <label className="block text-xs font-bold text-slate-700 mb-1">年間ボーナス (手取り)</label>
-                    <div className="relative">
-                        <JapaneseYen size={16} className="absolute left-3 top-3 text-slate-400" />
-                        <MoneyInput
-                            className="w-full pl-9 p-2 rounded-lg bg-white border border-slate-200 text-slate-900 font-medium"
-                            value={person.annualBonus}
-                            onChange={(val) => handleChange('annualBonus', val)}
-                        />
-                    </div>
+                    <MoneyInput
+                        className="w-full p-2 rounded-lg bg-white border border-slate-200 text-slate-900 font-medium"
+                        value={person.annualBonus}
+                        onChange={(val) => handleChange('annualBonus', val)}
+                    />
                 </div>
                 <div className="relative">
                     <label className="block text-xs font-bold text-slate-700 mb-1">退職金 (見込み)</label>
-                    <div className="relative">
-                        <Briefcase size={16} className="absolute left-3 top-3 text-slate-400" />
-                        <MoneyInput
-                            className="w-full pl-9 p-2 rounded-lg bg-white border border-slate-200 text-slate-900 font-medium"
-                            value={person.retirementAllowance}
-                            onChange={(val) => handleChange('retirementAllowance', val)}
-                        />
-                    </div>
+                    <MoneyInput
+                        className="w-full p-2 rounded-lg bg-white border border-slate-200 text-slate-900 font-medium"
+                        value={person.retirementAllowance}
+                        onChange={(val) => handleChange('retirementAllowance', val)}
+                    />
                 </div>
             </div>
         </div>

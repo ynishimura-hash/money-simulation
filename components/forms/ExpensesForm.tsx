@@ -1,6 +1,6 @@
 import React from 'react';
 import { Housing, Expenses } from '@/lib/types';
-import { Home, Coffee, AlertCircle, Car, JapaneseYen } from 'lucide-react';
+import { Home, Coffee, AlertCircle, Car } from 'lucide-react';
 import MoneyInput from '../MoneyInput';
 
 interface Props {
