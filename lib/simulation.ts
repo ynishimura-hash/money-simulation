@@ -26,24 +26,33 @@ export function calculateLifePlan(input: LifePlanInput): YearlyCashFlow[] {
         let annualPension = 0;
 
         // Head
-        if (currentYearAge < headOfHousehold.targetRetirementAge) {
+        if (config.enableRetirement !== false) {
+            // Standard Logic with Retirement
+            if (currentYearAge < headOfHousehold.targetRetirementAge) {
+                annualIncome += headOfHousehold.annualIncome + headOfHousehold.annualBonus;
+            } else if (currentYearAge === headOfHousehold.targetRetirementAge) {
+                annualIncome += headOfHousehold.retirementAllowance;
+            } else if (currentYearAge >= config.socialSecurityPensionOffset) {
+                annualPension += getYearlyPension(headOfHousehold.employmentType);
+            }
+        } else {
+            // Work Forever
             annualIncome += headOfHousehold.annualIncome + headOfHousehold.annualBonus;
-        } else if (currentYearAge === headOfHousehold.targetRetirementAge) {
-            // Retirement lump sum simulated as income
-            annualIncome += headOfHousehold.retirementAllowance;
-        } else if (currentYearAge >= config.socialSecurityPensionOffset) {
-            annualPension += getYearlyPension(headOfHousehold.employmentType);
         }
 
         // Spouse
         if (spouse) {
             const spouseAge = spouse.currentAge + year;
-            if (spouseAge < spouse.targetRetirementAge) {
+            if (config.enableRetirement !== false) {
+                if (spouseAge < spouse.targetRetirementAge) {
+                    annualIncome += spouse.annualIncome + spouse.annualBonus;
+                } else if (spouseAge === spouse.targetRetirementAge) {
+                    annualIncome += spouse.retirementAllowance;
+                } else if (spouseAge >= config.socialSecurityPensionOffset) {
+                    annualPension += getYearlyPension(spouse.employmentType);
+                }
+            } else {
                 annualIncome += spouse.annualIncome + spouse.annualBonus;
-            } else if (spouseAge === spouse.targetRetirementAge) {
-                annualIncome += spouse.retirementAllowance;
-            } else if (spouseAge >= config.socialSecurityPensionOffset) {
-                annualPension += getYearlyPension(spouse.employmentType);
             }
         }
 
@@ -105,12 +114,20 @@ export function calculateLifePlan(input: LifePlanInput): YearlyCashFlow[] {
         });
 
         // Retirement Living Override
-        if (currentYearAge >= headOfHousehold.targetRetirementAge) {
-            // Fixed 200,000 JPY/mo in current value, inflated to future value
-            basicLiving = 200000 * 12 * inflationMultiplier;
+        if (config.enableRetirement !== false) {
+            if (currentYearAge >= headOfHousehold.targetRetirementAge) {
+                basicLiving = 200000 * 12 * inflationMultiplier;
+            }
         }
 
-        const totalExpenses = basicLiving + specialExp + housingCostAnnual + educationCost + eventCost;
+        let totalExpenses = basicLiving + specialExp + housingCostAnnual + educationCost + eventCost;
+
+        if (config.enableExpenses === false) {
+            totalExpenses = 0;
+            // But Tsumitate Flow is an "Expense" from Cash Flow perspective?
+            // No, Tsumitate is asset transfer.
+            // If EnableExpenses is OFF, strictly Expenses(Consumption) are 0.
+        }
 
         // Tsumitate Flow
         let tsumitateFlow = 0;
@@ -129,7 +146,8 @@ export function calculateLifePlan(input: LifePlanInput): YearlyCashFlow[] {
         }
 
         // 2. Main Investment Growth
-        const mainReturn = mainInvestments * (config.investmentReturnRate / 100);
+        const globalReturnRate = assets.monthlyInvestment?.expectedReturn || 0;
+        const mainReturn = mainInvestments * (globalReturnRate / 100);
         mainInvestments += mainReturn;
 
         // 3. Surplus Allocation

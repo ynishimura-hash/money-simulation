@@ -67,10 +67,11 @@ export interface Assets {
     otherMonthlyPayment: number;
 }
 
-export interface SimulationConfig {
-    investmentReturnRate: number; // %
+export interface Config {
     inflationRate: number; // %
     socialSecurityPensionOffset: number; // Age to start receiving pension (usually 65)
+    enableExpenses?: boolean;
+    enableRetirement?: boolean;
 }
 
 // Aggregated input for the simulation
@@ -81,7 +82,7 @@ export interface LifePlanInput {
     housing: Housing;
     expenses: Expenses;
     assets: Assets;
-    config: SimulationConfig;
+    config: Config;
 }
 
 export interface YearlyCashFlow {

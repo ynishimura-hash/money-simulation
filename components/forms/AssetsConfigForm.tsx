@@ -1,51 +1,33 @@
 import React from 'react';
-import { Assets, SimulationConfig } from '@/lib/types';
+import { Assets, Config } from '@/lib/types';
 import { Landmark, Settings, TrendingUp } from 'lucide-react';
 import MoneyInput from '../MoneyInput';
 import PercentageInput from '../PercentageInput';
 
 interface Props {
     assets: Assets;
-    config: SimulationConfig;
+    config: Config;
     onAssetsChange: (a: Assets) => void;
-    onConfigChange: (c: SimulationConfig) => void;
+    onConfigChange: (c: Config) => void;
 }
 
 export default function AssetsConfigForm({ assets, config, onAssetsChange, onConfigChange }: Props) {
     const handleAsset = (key: keyof Assets, val: any) => onAssetsChange({ ...assets, [key]: val });
-    const handleConfig = (key: keyof SimulationConfig, val: any) => onConfigChange({ ...config, [key]: val });
+    const handleConfig = (key: keyof Config, val: any) => onConfigChange({ ...config, [key]: val });
 
     return (
         <div className="space-y-6">
             {/* Assets */}
             <div className="space-y-3">
                 <h3 className="font-bold text-slate-700 flex items-center gap-2">
-                    <Landmark className="text-blue-600" /> 現在の資産
+                    <Landmark className="text-blue-600" /> 現在の資産・積立
                 </h3>
-                <div className="bg-blue-50 p-4 rounded-xl border border-blue-100 grid grid-cols-2 gap-4">
-                    <div>
-                        <label className="text-xs font-bold text-slate-700">預金 (キャッシュ)</label>
-                        <MoneyInput
-                            className="w-full p-2 rounded border border-blue-200 text-sm text-slate-900 font-medium"
-                            value={assets.cashSavings}
-                            onChange={(val) => handleAsset('cashSavings', val)}
-                        />
-                    </div>
-                    <div>
-                        <label className="text-xs font-bold text-slate-700">投資済み資産 (時価)</label>
-                        <MoneyInput
-                            className="w-full p-2 rounded border border-blue-200 text-sm text-slate-900 font-medium"
-                            value={assets.investmentAssets}
-                            onChange={(val) => handleAsset('investmentAssets', val)}
-                        />
-                    </div>
-                </div>
 
-                {/* Tsumitate */}
-                <div className="bg-blue-50/50 p-4 rounded-xl border border-blue-100">
+                {/* Tsumitate (Moved to Top) */}
+                <div className="bg-blue-50/50 p-4 rounded-xl border border-blue-100 mb-4">
                     <label className="text-xs font-bold text-slate-700 mb-2 block flex items-center gap-1">
                         <TrendingUp size={14} className="text-blue-500" />
-                        毎月の積立投資 (NISA等)
+                        毎月の積立投資・利回り (NISA等)
                     </label>
                     <div className="grid grid-cols-3 gap-3">
                         <div>
@@ -75,6 +57,26 @@ export default function AssetsConfigForm({ assets, config, onAssetsChange, onCon
                                 <span className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs text font-bold">年</span>
                             </div>
                         </div>
+                    </div>
+                    <p className="text-[10px] text-slate-400 mt-2">※ ここで設定した「想定利回り」が、既存の投資資産にも適用されます。</p>
+                </div>
+
+                <div className="bg-blue-50 p-4 rounded-xl border border-blue-100 grid grid-cols-2 gap-4">
+                    <div>
+                        <label className="text-xs font-bold text-slate-700">預金 (キャッシュ)</label>
+                        <MoneyInput
+                            className="w-full p-2 rounded border border-blue-200 text-sm text-slate-900 font-medium"
+                            value={assets.cashSavings}
+                            onChange={(val) => handleAsset('cashSavings', val)}
+                        />
+                    </div>
+                    <div>
+                        <label className="text-xs font-bold text-slate-700">投資済み資産 (時価)</label>
+                        <MoneyInput
+                            className="w-full p-2 rounded border border-blue-200 text-sm text-slate-900 font-medium"
+                            value={assets.investmentAssets}
+                            onChange={(val) => handleAsset('investmentAssets', val)}
+                        />
                     </div>
                 </div>
 
@@ -106,22 +108,38 @@ export default function AssetsConfigForm({ assets, config, onAssetsChange, onCon
                 <h3 className="font-bold text-slate-700 flex items-center gap-2">
                     <Settings className="text-purple-600" /> シミュレーション前提
                 </h3>
-                <div className="bg-purple-50 p-4 rounded-xl border border-purple-100 grid grid-cols-2 gap-4">
-                    <div>
-                        <label className="text-xs font-bold text-slate-700 flex items-center gap-1 mb-1">
-                            <TrendingUp size={12} /> 想定運用利回り(年率)
-                        </label>
-                        <PercentageInput
-                            value={config.investmentReturnRate}
-                            onChange={(val) => handleConfig('investmentReturnRate', val)}
-                        />
-                    </div>
-                    <div>
-                        <label className="text-xs font-bold text-slate-700 mb-1 block">インフレ率 (年率)</label>
-                        <PercentageInput
-                            value={config.inflationRate}
-                            onChange={(val) => handleConfig('inflationRate', val)}
-                        />
+                <div className="bg-purple-50 p-4 rounded-xl border border-purple-100">
+                    <div className="space-y-4">
+                        <div>
+                            <label className="text-xs font-bold text-slate-700 mb-1 block">インフレ率 (年率)</label>
+                            <PercentageInput
+                                value={config.inflationRate}
+                                onChange={(val) => handleConfig('inflationRate', val)}
+                            />
+                            <p className="text-[10px] text-slate-400 mt-1">※ 全ての生活費と教育費がこの率で上昇すると仮定します。</p>
+                        </div>
+
+                        <div className="pt-4 border-t border-purple-100 grid grid-cols-2 gap-4">
+                            <label className="flex items-center gap-2 cursor-pointer">
+                                <input
+                                    type="checkbox"
+                                    className="accent-blue-600 w-4 h-4"
+                                    checked={config.enableExpenses ?? true}
+                                    onChange={(e) => handleConfig('enableExpenses', e.target.checked)}
+                                />
+                                <span className="text-xs font-bold text-slate-700">生活費・支出を含める</span>
+                            </label>
+
+                            <label className="flex items-center gap-2 cursor-pointer">
+                                <input
+                                    type="checkbox"
+                                    className="accent-blue-600 w-4 h-4"
+                                    checked={config.enableRetirement ?? true}
+                                    onChange={(e) => handleConfig('enableRetirement', e.target.checked)}
+                                />
+                                <span className="text-xs font-bold text-slate-700">引退・老後生活を考慮</span>
+                            </label>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -59,9 +59,10 @@ export default function Home() {
       otherMonthlyPayment: 0
     },
     config: {
-      investmentReturnRate: 5.0,
       inflationRate: 2.0,
-      socialSecurityPensionOffset: 65
+      socialSecurityPensionOffset: 65,
+      enableExpenses: true,
+      enableRetirement: true
     }
   });
 
@@ -269,7 +270,7 @@ export default function Home() {
             <div className="p-4 border-b border-slate-100 mb-4">
               <h3 className="font-bold text-lg text-slate-800">資産推移シミュレーション</h3>
               <p className="text-xs text-slate-500">
-                {input.config.investmentReturnRate}%運用 / インフレ率{input.config.inflationRate}%
+                {input.assets.monthlyInvestment?.expectedReturn || 0}%運用 / インフレ率{input.config.inflationRate}%
               </p>
             </div>
             <AssetTransitionGraph data={results} />
