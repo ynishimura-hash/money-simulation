@@ -2,6 +2,7 @@ import React from 'react';
 import { Housing, Expenses } from '@/lib/types';
 import { Home, Coffee, AlertCircle, Car } from 'lucide-react';
 import MoneyInput from '../MoneyInput';
+import NumberInput from '../NumberInput';
 
 interface Props {
     housing: Housing;
@@ -70,11 +71,11 @@ export default function ExpensesForm({ housing, expenses, onHousingChange, onExp
                         {housing.type === 'own_with_loan' && (
                             <div>
                                 <label className="text-xs font-bold text-slate-700">ローンの残り年数</label>
-                                <input
-                                    type="number"
+                                <NumberInput
                                     className="w-full p-2 rounded border border-orange-200 text-sm text-slate-900 font-medium"
                                     value={housing.remainingLoanYears}
-                                    onChange={(e) => handleHousing('remainingLoanYears', Number(e.target.value))}
+                                    onChange={(val) => handleHousing('remainingLoanYears', val)}
+                                    unit="年"
                                 />
                             </div>
                         )}
@@ -128,13 +129,13 @@ export default function ExpensesForm({ housing, expenses, onHousingChange, onExp
                         {expenses.vehicleReplacements.map((car, idx) => (
                             <div key={idx} className="flex gap-2 items-center mb-2">
                                 <span className="text-xs">間隔:</span>
-                                <input
-                                    type="number"
+                                <NumberInput
                                     className="w-16 p-1 rounded text-xs text-slate-900 font-medium"
                                     value={car.intervalYears}
-                                    onChange={(e) => handleCar(idx, 'intervalYears', Number(e.target.value))}
+                                    onChange={(val) => handleCar(idx, 'intervalYears', val)}
+                                    unit="年"
                                 />
-                                <span className="text-xs">年 / 予算:</span>
+                                <span className="text-xs">/ 予算:</span>
                                 <MoneyInput
                                     className="w-24 p-1 rounded text-xs text-slate-900 font-medium"
                                     value={car.cost}
