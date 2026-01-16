@@ -15,7 +15,7 @@ export default function AssetTransitionGraph({ data }: Props) {
         <div className="h-80 w-full bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
             <h4 className="text-sm font-bold text-slate-500 mb-4 text-center">資産の推移 (名目額)</h4>
             <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={data} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
+                <AreaChart data={data} margin={{ top: 10, right: 10, left: 0, bottom: 30 }}>
                     <defs>
                         <linearGradient id="colorInvest" x1="0" y1="0" x2="0" y2="1">
                             <stop offset="5%" stopColor="#3B82F6" stopOpacity={0.8} />

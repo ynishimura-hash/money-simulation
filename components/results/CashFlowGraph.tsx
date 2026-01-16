@@ -15,7 +15,7 @@ export default function CashFlowGraph({ data }: Props) {
         <div className="h-80 w-full bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
             <h4 className="text-sm font-bold text-slate-500 mb-4 text-center">年間収支の推移</h4>
             <ResponsiveContainer width="100%" height="100%">
-                <ComposedChart data={data} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
+                <ComposedChart data={data} margin={{ top: 10, right: 10, left: 0, bottom: 30 }}>
                     <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F0" />
                     <XAxis dataKey="age" tick={{ fontSize: 10 }} name="年齢" />
                     <YAxis tickFormatter={formatYAxis} tick={{ fontSize: 10 }} />
