@@ -16,7 +16,14 @@ const formatYAxis = (tick: number) => {
 
 export default function AssetTransitionGraph({ data, isLogScale = false, maxDisplayAge = 100 }: Props) {
     // Filter data based on maxDisplayAge
-    const displayData = data.filter(d => d.age <= maxDisplayAge);
+    // Filter data based on maxDisplayAge and sanitize for Log Scale (Recharts crashes on 0 with log)
+    const displayData = data
+        .filter(d => d.age <= maxDisplayAge)
+        .map(d => isLogScale ? {
+            ...d,
+            totalAssets: Math.max(d.totalAssets, 1),
+            totalAssetsSavingsOnly: d.totalAssetsSavingsOnly ? Math.max(d.totalAssetsSavingsOnly, 1) : 1
+        } : d);
 
     return (
         <div className="h-80 w-full bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
@@ -46,7 +53,7 @@ export default function AssetTransitionGraph({ data, isLogScale = false, maxDisp
                         tickFormatter={formatYAxis}
                         tick={{ fontSize: 11, fill: '#334155' }}
                         scale={isLogScale ? 'log' : 'auto'}
-                        domain={isLogScale ? ['auto', 'auto'] : [0, 'auto']}
+                        domain={isLogScale ? ['dataMin', 'auto'] : [0, 'auto']}
                         allowDataOverflow
                     />
                     <Tooltip
