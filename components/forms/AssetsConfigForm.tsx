@@ -1,6 +1,7 @@
 import React from 'react';
 import { Assets, SimulationConfig } from '@/lib/types';
 import { Landmark, Settings, TrendingUp } from 'lucide-react';
+import MoneyInput from '../MoneyInput';
 
 interface Props {
     assets: Assets;
@@ -23,20 +24,18 @@ export default function AssetsConfigForm({ assets, config, onAssetsChange, onCon
                 <div className="bg-blue-50 p-4 rounded-xl border border-blue-100 grid grid-cols-2 gap-4">
                     <div>
                         <label className="text-xs font-bold text-slate-700">預金 (キャッシュ)</label>
-                        <input
-                            type="number"
+                        <MoneyInput
                             className="w-full p-2 rounded border border-blue-200 text-sm text-slate-900 font-medium"
                             value={assets.cashSavings}
-                            onChange={(e) => handleAsset('cashSavings', Number(e.target.value))}
+                            onChange={(val) => handleAsset('cashSavings', val)}
                         />
                     </div>
                     <div>
                         <label className="text-xs font-bold text-slate-700">投資済み資産 (時価)</label>
-                        <input
-                            type="number"
+                        <MoneyInput
                             className="w-full p-2 rounded border border-blue-200 text-sm text-slate-900 font-medium"
                             value={assets.investmentAssets}
-                            onChange={(e) => handleAsset('investmentAssets', Number(e.target.value))}
+                            onChange={(val) => handleAsset('investmentAssets', val)}
                         />
                     </div>
                 </div>
@@ -46,20 +45,18 @@ export default function AssetsConfigForm({ assets, config, onAssetsChange, onCon
                     <div className="grid grid-cols-2 gap-4">
                         <div>
                             <label className="text-[10px] text-slate-500">毎月の返済額</label>
-                            <input
-                                type="number"
+                            <MoneyInput
                                 className="w-full p-2 rounded border border-slate-200 text-sm text-slate-900 font-medium"
                                 value={assets.otherMonthlyPayment}
-                                onChange={(e) => handleAsset('otherMonthlyPayment', Number(e.target.value))}
+                                onChange={(val) => handleAsset('otherMonthlyPayment', val)}
                             />
                         </div>
                         <div>
                             <label className="text-[10px] text-slate-500">残高 (概算)</label>
-                            <input
-                                type="number"
+                            <MoneyInput
                                 className="w-full p-2 rounded border border-slate-200 text-sm text-slate-900 font-medium"
                                 value={assets.otherLoansRemaining}
-                                onChange={(e) => handleAsset('otherLoansRemaining', Number(e.target.value))}
+                                onChange={(val) => handleAsset('otherLoansRemaining', val)}
                             />
                         </div>
                     </div>

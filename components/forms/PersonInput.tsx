@@ -1,6 +1,7 @@
 import React from 'react';
 import { Person } from '@/lib/types';
 import { User, Briefcase, JapaneseYen } from 'lucide-react';
+import MoneyInput from '../MoneyInput';
 
 interface Props {
     title: string;
@@ -59,12 +60,10 @@ export default function PersonInput({ title, person, onChange, colorClass }: Pro
                     <label className="block text-xs font-bold text-slate-700 mb-1">昨年の年収 (額面)</label>
                     <div className="relative">
                         <JapaneseYen size={16} className="absolute left-3 top-3 text-slate-400" />
-                        <input
-                            type="number"
-                            step={10000}
+                        <MoneyInput
                             className="w-full pl-9 p-2 rounded-lg bg-white border border-slate-200 text-slate-900 font-medium"
                             value={person.annualIncome}
-                            onChange={(e) => handleChange('annualIncome', Number(e.target.value))}
+                            onChange={(val) => handleChange('annualIncome', val)}
                         />
                     </div>
                 </div>
@@ -72,12 +71,10 @@ export default function PersonInput({ title, person, onChange, colorClass }: Pro
                     <label className="block text-xs font-bold text-slate-700 mb-1">年間ボーナス (手取り)</label>
                     <div className="relative">
                         <JapaneseYen size={16} className="absolute left-3 top-3 text-slate-400" />
-                        <input
-                            type="number"
-                            step={10000}
+                        <MoneyInput
                             className="w-full pl-9 p-2 rounded-lg bg-white border border-slate-200 text-slate-900 font-medium"
                             value={person.annualBonus}
-                            onChange={(e) => handleChange('annualBonus', Number(e.target.value))}
+                            onChange={(val) => handleChange('annualBonus', val)}
                         />
                     </div>
                 </div>
@@ -85,12 +82,10 @@ export default function PersonInput({ title, person, onChange, colorClass }: Pro
                     <label className="block text-xs font-bold text-slate-700 mb-1">退職金 (見込み)</label>
                     <div className="relative">
                         <Briefcase size={16} className="absolute left-3 top-3 text-slate-400" />
-                        <input
-                            type="number"
-                            step={100000}
+                        <MoneyInput
                             className="w-full pl-9 p-2 rounded-lg bg-white border border-slate-200 text-slate-900 font-medium"
                             value={person.retirementAllowance}
-                            onChange={(e) => handleChange('retirementAllowance', Number(e.target.value))}
+                            onChange={(val) => handleChange('retirementAllowance', val)}
                         />
                     </div>
                 </div>

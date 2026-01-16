@@ -1,6 +1,7 @@
 import React from 'react';
 import { Housing, Expenses } from '@/lib/types';
 import { Home, Coffee, AlertCircle, Car, JapaneseYen } from 'lucide-react';
+import MoneyInput from '../MoneyInput';
 
 interface Props {
     housing: Housing;
@@ -60,11 +61,10 @@ export default function ExpensesForm({ housing, expenses, onHousingChange, onExp
                             <label className="text-xs font-bold text-slate-700">
                                 {housing.type === 'rent' ? '毎月の家賃' : '毎月のローン返済額'}
                             </label>
-                            <input
-                                type="number"
+                            <MoneyInput
                                 className="w-full p-2 rounded border border-orange-200 text-sm text-slate-900 font-medium"
                                 value={housing.monthlyCost}
-                                onChange={(e) => handleHousing('monthlyCost', Number(e.target.value))}
+                                onChange={(val) => handleHousing('monthlyCost', val)}
                             />
                         </div>
                         {housing.type === 'own_with_loan' && (
@@ -83,11 +83,10 @@ export default function ExpensesForm({ housing, expenses, onHousingChange, onExp
                     {housing.type.includes('own') && (
                         <div>
                             <label className="text-xs font-bold text-slate-700">年間の固定資産税・修繕費</label>
-                            <input
-                                type="number"
+                            <MoneyInput
                                 className="w-full p-2 rounded border border-orange-200 text-sm text-slate-900 font-medium"
                                 value={housing.maintenanceCostPerYear}
-                                onChange={(e) => handleHousing('maintenanceCostPerYear', Number(e.target.value))}
+                                onChange={(val) => handleHousing('maintenanceCostPerYear', val)}
                             />
                         </div>
                     )}
@@ -103,20 +102,18 @@ export default function ExpensesForm({ housing, expenses, onHousingChange, onExp
                     <div>
                         <label className="text-xs font-bold text-slate-700">毎月の基本生活費 (食費・光熱費・通信費など)</label>
                         <p className="text-[10px] text-slate-400 mb-1">※ 住居費・教育費は除いてください</p>
-                        <input
-                            type="number"
+                        <MoneyInput
                             className="w-full p-2 rounded border border-emerald-200 text-sm text-slate-900 font-medium"
                             value={expenses.monthlyBasicLiving}
-                            onChange={(e) => handleExpense('monthlyBasicLiving', Number(e.target.value))}
+                            onChange={(val) => handleExpense('monthlyBasicLiving', val)}
                         />
                     </div>
                     <div>
                         <label className="text-xs font-bold text-slate-700">年間の特別支出 (旅行・帰省・家具家電など)</label>
-                        <input
-                            type="number"
+                        <MoneyInput
                             className="w-full p-2 rounded border border-emerald-200 text-sm text-slate-900 font-medium"
                             value={expenses.yearlySpecialExpenses}
-                            onChange={(e) => handleExpense('yearlySpecialExpenses', Number(e.target.value))}
+                            onChange={(val) => handleExpense('yearlySpecialExpenses', val)}
                         />
                     </div>
 
@@ -138,11 +135,10 @@ export default function ExpensesForm({ housing, expenses, onHousingChange, onExp
                                     onChange={(e) => handleCar(idx, 'intervalYears', Number(e.target.value))}
                                 />
                                 <span className="text-xs">年 / 予算:</span>
-                                <input
-                                    type="number"
+                                <MoneyInput
                                     className="w-24 p-1 rounded text-xs text-slate-900 font-medium"
                                     value={car.cost}
-                                    onChange={(e) => handleCar(idx, 'cost', Number(e.target.value))}
+                                    onChange={(val) => handleCar(idx, 'cost', val)}
                                 />
                                 <button onClick={() => removeCar(idx)} className="text-slate-400 hover:text-red-500"><AlertCircle size={14} /></button>
                             </div>
