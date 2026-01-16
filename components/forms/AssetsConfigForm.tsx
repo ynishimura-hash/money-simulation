@@ -73,28 +73,28 @@ export default function AssetsConfigForm({ assets, config, onAssetsChange, onCon
                         <label className="text-xs font-bold text-slate-700 flex items-center gap-1">
                             <TrendingUp size={12} /> 想定運用利回り(年率)
                         </label>
-                        <div className="flex items-center gap-2">
+                        <div className="relative">
                             <input
                                 type="number"
                                 step={0.1}
-                                className="w-full p-2 rounded border border-purple-200 text-sm text-slate-900 font-medium"
+                                className="w-full p-2 pr-6 rounded border border-purple-200 text-sm text-slate-900 font-medium"
                                 value={config.investmentReturnRate}
                                 onChange={(e) => handleConfig('investmentReturnRate', Number(e.target.value))}
                             />
-                            <span className="text-sm font-bold">%</span>
+                            <span className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-500 text-sm font-bold pointer-events-none">%</span>
                         </div>
                     </div>
                     <div>
                         <label className="text-xs font-bold text-slate-700">インフレ率 (年率)</label>
-                        <div className="flex items-center gap-2">
+                        <div className="relative">
                             <input
                                 type="number"
                                 step={0.1}
-                                className="w-full p-2 rounded border border-purple-200 text-sm text-slate-900 font-medium"
+                                className="w-full p-2 pr-6 rounded border border-purple-200 text-sm text-slate-900 font-medium"
                                 value={config.inflationRate}
                                 onChange={(e) => handleConfig('inflationRate', Number(e.target.value))}
                             />
-                            <span className="text-sm font-bold">%</span>
+                            <span className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-500 text-sm font-bold pointer-events-none">%</span>
                         </div>
                     </div>
                 </div>
