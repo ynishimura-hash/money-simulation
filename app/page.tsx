@@ -66,7 +66,7 @@ export default function Home() {
     }
   });
 
-  const [expandedSection, setExpandedSection] = useState<string | null>('basic');
+  const [expandedSection, setExpandedSection] = useState<string | null>('assets');
 
   // Comparison State
   const [compareInput, setCompareInput] = useState<LifePlanInput | null>(null);
@@ -167,7 +167,22 @@ export default function Home() {
         {/* Left: Inputs */}
         <div className="lg:col-span-5 space-y-4">
 
-          {/* 1. Basic Profile */}
+          {/* 1. Assets & Config */}
+          <div>
+            <SectionHeader id="assets" title="資産・シミュレーション条件" icon={TrendingUp} />
+            {expandedSection === 'assets' && (
+              <div className="bg-white p-4 rounded-b-xl border border-t-0 border-slate-200 shadow-sm">
+                <AssetsConfigForm
+                  assets={input.assets}
+                  config={input.config}
+                  onAssetsChange={(a) => setInput({ ...input, assets: a })}
+                  onConfigChange={(c) => setInput({ ...input, config: c })}
+                />
+              </div>
+            )}
+          </div>
+
+          {/* 2. Basic Profile */}
           <div>
             <SectionHeader id="basic" title="基本情報・家族" icon={Users} />
             {expandedSection === 'basic' && (
@@ -225,19 +240,7 @@ export default function Home() {
           </div>
 
           {/* 3. Assets & Config */}
-          <div>
-            <SectionHeader id="assets" title="資産・シミュレーション条件" icon={TrendingUp} />
-            {expandedSection === 'assets' && (
-              <div className="bg-white p-4 rounded-b-xl border border-t-0 border-slate-200 shadow-sm">
-                <AssetsConfigForm
-                  assets={input.assets}
-                  config={input.config}
-                  onAssetsChange={(a) => setInput({ ...input, assets: a })}
-                  onConfigChange={(c) => setInput({ ...input, config: c })}
-                />
-              </div>
-            )}
-          </div>
+
         </div>
 
         {/* Right: Results */}
