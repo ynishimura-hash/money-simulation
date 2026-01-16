@@ -10,6 +10,9 @@ export function calculateLifePlan(input: LifePlanInput): YearlyCashFlow[] {
     let mainInvestments = assets.investmentAssets;
     let tsumitateInvestments = 0;
 
+    // Savings Only Scenario Stats
+    let savingsScenarioTotal = assets.cashSavings + assets.investmentAssets;
+
     // We simulate until the head of household is 100 years old
     const startAge = headOfHousehold.currentAge;
     const maxAge = 100;
@@ -62,7 +65,7 @@ export function calculateLifePlan(input: LifePlanInput): YearlyCashFlow[] {
             (expenses.otherBasic || 0);
 
         // Sum Only
-        const basicLiving = monthlyLivingSum * 12 * inflationMultiplier;
+        let basicLiving = monthlyLivingSum * 12 * inflationMultiplier;
         const specialExp = expenses.yearlySpecialExpenses * inflationMultiplier;
 
         // 2. Housing
@@ -101,6 +104,12 @@ export function calculateLifePlan(input: LifePlanInput): YearlyCashFlow[] {
             }
         });
 
+        // Retirement Living Override
+        if (currentYearAge >= headOfHousehold.targetRetirementAge) {
+            // Fixed 200,000 JPY/mo in current value, inflated to future value
+            basicLiving = 200000 * 12 * inflationMultiplier;
+        }
+
         const totalExpenses = basicLiving + specialExp + housingCostAnnual + educationCost + eventCost;
 
         // Tsumitate Flow
@@ -114,6 +123,7 @@ export function calculateLifePlan(input: LifePlanInput): YearlyCashFlow[] {
 
         // 1. Tsumitate Growth
         if (assets.monthlyInvestment) {
+            // With Return
             const tsumitateReturn = tsumitateInvestments * (assets.monthlyInvestment.expectedReturn / 100);
             tsumitateInvestments += tsumitateReturn + tsumitateFlow;
         }
@@ -140,12 +150,22 @@ export function calculateLifePlan(input: LifePlanInput): YearlyCashFlow[] {
                     deficit -= mainInvestments;
                     mainInvestments = 0;
                     if (tsumitateInvestments > 0) {
-                        // Emergency fund from Tsumitate
                         tsumitateInvestments -= deficit;
                     }
                 }
             }
         }
+
+        // --- SAVINGS ONLY SCENARIO ---
+        // Treat tsumitate as just cash savings inside the same pot (or simplified)
+        // Actually, just add net cash flow (Income - Exp)
+        // Income is same. Expenses same. 
+        // Surplus (before tsumitate deduction) = totalIncome - totalExpenses
+        // In savings scenario, tsumitate is just money moving from one pocket to another, 0 yield.
+        // So Net Flow = totalIncome - totalExpenses.
+        const savingsSurplus = totalIncome - totalExpenses; // Tsumitate is part of asset accumulation
+        savingsScenarioTotal += savingsSurplus;
+        if (savingsScenarioTotal < 0) savingsScenarioTotal = 0; // No debt tracking in this simple calc
 
         const totalInvestments = mainInvestments + tsumitateInvestments;
         const totalAssets = currentCash + totalInvestments;
@@ -165,7 +185,8 @@ export function calculateLifePlan(input: LifePlanInput): YearlyCashFlow[] {
             totalAssets: Math.round(totalAssets),
             investmentAssets: Math.round(totalInvestments),
             cashAssets: Math.round(currentCash),
-            realTotalAssets: Math.round(totalAssets / inflationMultiplier)
+            realTotalAssets: Math.round(totalAssets / inflationMultiplier),
+            totalAssetsSavingsOnly: Math.round(savingsScenarioTotal)
         });
     }
 

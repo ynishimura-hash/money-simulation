@@ -275,12 +275,7 @@ export default function Home() {
             <AssetTransitionGraph data={results} />
           </div>
 
-          <div className="bg-white p-2 rounded-2xl shadow-sm border border-slate-200">
-            <div className="p-4 border-b border-slate-100 mb-4">
-              <h3 className="font-bold text-lg text-slate-800">年間収支キャッシュフロー</h3>
-            </div>
-            <CashFlowGraph data={results} />
-          </div>
+
 
           {/* Disclaimer */}
           <div className="px-4 py-2 text-[10px] text-slate-400 text-center">

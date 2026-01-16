@@ -110,4 +110,5 @@ export interface YearlyCashFlow {
 
     // Inflation adjusted
     realTotalAssets: number;
+    totalAssetsSavingsOnly?: number; // With 0% return on investments
 }

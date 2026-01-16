@@ -13,16 +13,16 @@ const formatYAxis = (tick: number) => {
 export default function AssetTransitionGraph({ data }: Props) {
     return (
         <div className="h-80 w-full bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
-            <h4 className="text-sm font-bold text-slate-500 mb-4 text-center">資産の推移 (名目額)</h4>
+            <h4 className="text-sm font-bold text-slate-500 mb-4 text-center">資産の推移 (運用 vs 現金)</h4>
             <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={data} margin={{ top: 10, right: 10, left: 0, bottom: 30 }}>
                     <defs>
-                        <linearGradient id="colorInvest" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="5%" stopColor="#3B82F6" stopOpacity={0.8} />
-                            <stop offset="95%" stopColor="#3B82F6" stopOpacity={0} />
+                        <linearGradient id="colorTotal" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.8} />
+                            <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0} />
                         </linearGradient>
-                        <linearGradient id="colorCash" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="5%" stopColor="#64748B" stopOpacity={0.8} />
+                        <linearGradient id="colorSavings" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="5%" stopColor="#64748B" stopOpacity={0.5} />
                             <stop offset="95%" stopColor="#64748B" stopOpacity={0} />
                         </linearGradient>
                     </defs>
@@ -34,8 +34,8 @@ export default function AssetTransitionGraph({ data }: Props) {
                         labelFormatter={(v) => `${v}歳`}
                     />
                     <Legend iconSize={8} wrapperStyle={{ fontSize: '10px' }} />
-                    <Area type="monotone" dataKey="investmentAssets" name="投資資産" stackId="1" stroke="#3B82F6" fill="url(#colorInvest)" />
-                    <Area type="monotone" dataKey="cashAssets" name="現金" stackId="1" stroke="#64748B" fill="url(#colorCash)" />
+                    <Area type="monotone" dataKey="totalAssets" name="資産運用した場合" stroke="#8b5cf6" fill="url(#colorTotal)" strokeWidth={2} />
+                    <Area type="monotone" dataKey="totalAssetsSavingsOnly" name="現金のみの場合" stroke="#64748B" fill="url(#colorSavings)" strokeDasharray="3 3" />
                 </AreaChart>
             </ResponsiveContainer>
         </div>

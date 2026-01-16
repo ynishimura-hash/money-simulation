@@ -29,8 +29,8 @@ export const EDUCATION_COSTS = {
 };
 
 export const DEFAULT_PENSION = {
-    employee: 145000 * 12, // Kosei Nenkin avg
-    self_employed: 65000 * 12, // Kokumin Nenkin only
-    dependent: 65000 * 12, // Category 3
+    employee: 120000 * 12, // Reduced from 145000 (Conservative estimate)
+    self_employed: 55000 * 12, // Reduced from 65000
+    dependent: 55000 * 12, // Reduced from 65000
     none: 0
 };
