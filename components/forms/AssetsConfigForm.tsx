@@ -70,31 +70,31 @@ export default function AssetsConfigForm({ assets, config, onAssetsChange, onCon
                 </h3>
                 <div className="bg-purple-50 p-4 rounded-xl border border-purple-100 grid grid-cols-2 gap-4">
                     <div>
-                        <label className="text-xs font-bold text-slate-700 flex items-center gap-1">
+                        <label className="text-xs font-bold text-slate-700 flex items-center gap-1 mb-1">
                             <TrendingUp size={12} /> 想定運用利回り(年率)
                         </label>
-                        <div className="relative">
+                        <div className="flex items-center bg-white border border-purple-200 rounded-lg px-3 py-2">
                             <input
                                 type="number"
                                 step={0.1}
-                                className="w-full p-2 pr-6 rounded border border-purple-200 text-sm text-slate-900 font-medium"
+                                className="w-full text-sm text-slate-900 font-medium outline-none bg-transparent"
                                 value={config.investmentReturnRate}
                                 onChange={(e) => handleConfig('investmentReturnRate', Number(e.target.value))}
                             />
-                            <span className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-500 text-sm font-bold pointer-events-none">%</span>
+                            <span className="text-slate-500 text-sm font-bold ml-1">%</span>
                         </div>
                     </div>
                     <div>
-                        <label className="text-xs font-bold text-slate-700">インフレ率 (年率)</label>
-                        <div className="relative">
+                        <label className="text-xs font-bold text-slate-700 mb-1 block">インフレ率 (年率)</label>
+                        <div className="flex items-center bg-white border border-purple-200 rounded-lg px-3 py-2">
                             <input
                                 type="number"
                                 step={0.1}
-                                className="w-full p-2 pr-6 rounded border border-purple-200 text-sm text-slate-900 font-medium"
+                                className="w-full text-sm text-slate-900 font-medium outline-none bg-transparent"
                                 value={config.inflationRate}
                                 onChange={(e) => handleConfig('inflationRate', Number(e.target.value))}
                             />
-                            <span className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-500 text-sm font-bold pointer-events-none">%</span>
+                            <span className="text-slate-500 text-sm font-bold ml-1">%</span>
                         </div>
                     </div>
                 </div>
